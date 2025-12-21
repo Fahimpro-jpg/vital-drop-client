@@ -45,7 +45,7 @@ const Navbar = () => {
             <div className="navbar-end gap-2">
                 {!isLoggedIn ? (
                     <>
-                        <NavLink to="/login" className="btn btn-ghost">Login</NavLink>
+                        <NavLink to="/login" className="btn btn-ghost bg-gray-300">Login</NavLink>
                         <NavLink to="/register" className="btn btn-primary text-white">Register</NavLink>
                     </>
                 ) : (
