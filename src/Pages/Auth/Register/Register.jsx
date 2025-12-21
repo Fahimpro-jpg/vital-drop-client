@@ -1,13 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
+import useAuth from '../../../Hooks/useAuth';
 
 const Register = () => {
     const { register, handleSubmit, formState: { errors }, watch } = useForm();
     const [districts, setDistricts] = useState([]);
     const [selectedDistrict, setSelectedDistrict] = useState(null);
-    const [imageUploading, setImageUploading] = useState(false);
+    
 
     const password = watch("password");
+
+    const {registerUser} = useAuth()
+
 
     // Load districts with nested upazilas
     useEffect(() => {
@@ -20,36 +24,14 @@ const Register = () => {
     }, []);
 
     const handleRegistration = async (data) => {
-        // Upload avatar to ImageBB
-        if (data.avatar && data.avatar[0]) {
-            setImageUploading(true);
-            const formData = new FormData();
-            formData.append('image', data.avatar[0]);
-
-            try {
-                const response = await fetch(`https://api.imgbb.com/1/upload?key=YOUR_IMAGEBB_API_KEY`, {
-                    method: 'POST',
-                    body: formData
-                });
-                const result = await response.json();
-                
-                if (result.success) {
-                    data.avatar = result.data.url;
-                }
-            } catch (error) {
-                console.error('Image upload failed:', error);
-                alert('Failed to upload image');
-                setImageUploading(false);
-                return;
-            }
-            setImageUploading(false);
-        }
-
-        // Remove confirm_password before sending
-        const { confirm_password, ...registrationData } = data;
         
-        console.log('Registration data:', registrationData);
-        // TODO: Send to your backend API
+      registerUser(data.email,data.password)
+      .then(result=>{
+        console.log(result.user)
+      })
+      .catch(error=>console.error(error))
+
+        
     };
 
     const bloodGroups = ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'];
@@ -202,9 +184,9 @@ const Register = () => {
                     <button 
                         type="submit" 
                         className="btn btn-primary text-white w-full mt-6"
-                        disabled={imageUploading}
+                        
                     >
-                        {imageUploading ? 'Uploading...' : 'Register'}
+                        Register
                     </button>
 
                     <p className="text-center mt-4">
