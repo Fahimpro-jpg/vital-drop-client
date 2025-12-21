@@ -1,0 +1,32 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+@import "tailwindcss";
+@plugin "daisyui"{
+  themes: light --default;
+}
+
+@plugin "daisyui/theme" {
+  name: "light";
+  default: true;
+  --color-primary: #DC2626;      /* Deep Red - Main brand color, primary buttons, logo */
+  --color-secondary: #1E40AF;    /* Trust Blue - Secondary buttons, links, highlights */
+  --color-accent: #10B981;       /* Success Green - Donate buttons, positive actions */
+  --color-neutral: #111827;      /* Dark Gray - Main text color */
+  --color-base-100: #F9FAFB;     /* Light Gray - Main background */
+  --color-base-200: #F3F4F6;     /* Medium Gray - Cards, sections background */
+  --color-base-300: #E5E7EB;     /* Darker Gray - Borders, dividers */
+  --color-info: #0891B2;         /* Cyan - Info messages, notifications */
+  --color-success: #10B981;      /* Green - Success messages, confirmations */
+  --color-warning: #F59E0B;      /* Amber - Warning messages, alerts */
+  --color-error: #DC2626;        /* Red - Error messages, validation errors */
+}
+
+
+body{
+  
+  font-family: "Poppins", sans-serif;
+  font-optical-sizing: auto;
+  font-style: normal;
+
+}
