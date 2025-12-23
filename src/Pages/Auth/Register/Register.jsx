@@ -1,17 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
+import { useNavigate, Link } from 'react-router';
 import useAuth from '../../../Hooks/useAuth';
+import axios from 'axios';
 
 const Register = () => {
     const { register, handleSubmit, formState: { errors }, watch } = useForm();
     const [districts, setDistricts] = useState([]);
     const [selectedDistrict, setSelectedDistrict] = useState(null);
-    
+    const [isLoading, setIsLoading] = useState(false);
 
     const password = watch("password");
+    const navigate = useNavigate();
 
-    const {registerUser} = useAuth()
-
+    const { registerUser, updateUserProfile } = useAuth();
 
     // Load districts with nested upazilas
     useEffect(() => {
@@ -24,14 +26,45 @@ const Register = () => {
     }, []);
 
     const handleRegistration = async (data) => {
+        setIsLoading(true);
         
-      registerUser(data.email,data.password)
-      .then(result=>{
-        console.log(result.user)
-      })
-      .catch(error=>console.error(error))
+        try {
+            // Get the image file
+            const profileImg = data.avatar[0]; // Fixed: was data.photo[0], should be data.avatar[0]
 
-        
+            // Register user first
+            const result = await registerUser(data.email, data.password);
+            console.log('User registered:', result.user);
+            
+            // Upload image to ImgBB
+            const formData = new FormData();
+            formData.append('image', profileImg);
+            
+            const imageAPI_URL = `https://api.imgbb.com/1/upload?key=${import.meta.env.VITE_image_host}`;
+
+            const imageResponse = await axios.post(imageAPI_URL, formData);
+            console.log('Image uploaded:', imageResponse.data.data.url);
+
+            // Update user profile with name and photo
+            const userProfile = {
+                displayName: data.name,
+                photoURL: imageResponse.data.data.url
+            };
+
+            await updateUserProfile(userProfile);
+            console.log('User profile updated successfully');
+
+            // TODO: Save additional user data (blood group, district, upazila) to your database here
+            
+            // Navigate to homepage after everything is complete
+            navigate('/');
+            
+        } catch (error) {
+            console.error('Registration error:', error);
+            alert('Registration failed: ' + error.message);
+        } finally {
+            setIsLoading(false);
+        }
     };
 
     const bloodGroups = ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'];
@@ -184,14 +217,14 @@ const Register = () => {
                     <button 
                         type="submit" 
                         className="btn btn-primary text-white w-full mt-6"
-                        
+                        disabled={isLoading}
                     >
-                        Register
+                        {isLoading ? 'Registering...' : 'Register'}
                     </button>
 
                     <p className="text-center mt-4">
                         Already have an account? 
-                        <a href="/login" className="text-primary font-semibold ml-1">Login</a>
+                        <Link to="/login" className="text-primary font-semibold ml-1">Login</Link>
                     </p>
                 </form>
             </div>

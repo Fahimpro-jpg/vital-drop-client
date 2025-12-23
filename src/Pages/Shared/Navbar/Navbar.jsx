@@ -1,19 +1,25 @@
-import React, { useState } from 'react';
+import React from 'react';
 import Logo from '../../../components/Logo/Logo';
 import { NavLink } from 'react-router';
+import useAuth from '../../../Hooks/useAuth';
 
 const Navbar = () => {
-    // TODO: Replace with actual auth state from your context/redux
-    const [isLoggedIn, setIsLoggedIn] = useState(false);
-    const user = {
-        name: "John Doe",
-        avatar: "https://via.placeholder.com/40" // Replace with actual user avatar
+    const { user, logOut } = useAuth();
+
+    const handleLogout = () => {
+        logOut()
+            .then(() => {
+                console.log('User logged out successfully');
+            })
+            .catch(error => {
+                console.log('Logout error:', error);
+            });
     };
 
     const navLinks = <>
         <li><NavLink to="/search" className={({isActive}) => isActive ? "text-primary font-semibold" : ""}>Search Donors</NavLink></li>     
         <li><NavLink to="/requests" className={({isActive}) => isActive ? "text-primary font-semibold" : ""}>Donation Requests</NavLink></li>
-        {isLoggedIn && (
+        {user && (
             <li><NavLink to="/funding" className={({isActive}) => isActive ? "text-primary font-semibold" : ""}>Funding</NavLink></li>
         )}
     </>;
@@ -43,7 +49,7 @@ const Navbar = () => {
             </div>
 
             <div className="navbar-end gap-2">
-                {!isLoggedIn ? (
+                {!user ? (
                     <>
                         <NavLink to="/login" className="btn btn-ghost bg-gray-300">Login</NavLink>
                         <NavLink to="/register" className="btn btn-primary text-white">Register</NavLink>
@@ -52,16 +58,19 @@ const Navbar = () => {
                     <div className="dropdown dropdown-end">
                         <div tabIndex={0} role="button" className="btn btn-ghost btn-circle avatar">
                             <div className="w-10 rounded-full ring ring-primary ring-offset-2">
-                                <img src={user.avatar} alt={user.name} />
+                                <img 
+                                    src={user?.photoURL || "https://via.placeholder.com/40"} 
+                                    alt={user?.displayName || "User Avatar"} 
+                                />
                             </div>
                         </div>
                         <ul tabIndex={0} className="menu menu-sm dropdown-content bg-base-100 rounded-box z-50 mt-3 w-52 p-2 shadow">
                             <li className="menu-title">
-                                <span>{user.name}</span>
+                                <span>{user?.displayName || user?.email}</span>
                             </li>
                             <li><NavLink to="/dashboard">Dashboard</NavLink></li>
                             <li><NavLink to="/profile">Profile</NavLink></li>
-                            <li><button onClick={() => setIsLoggedIn(false)} className="text-error">Logout</button></li>
+                            <li><button onClick={handleLogout} className="text-error">Logout</button></li>
                         </ul>
                     </div>
                 )}
