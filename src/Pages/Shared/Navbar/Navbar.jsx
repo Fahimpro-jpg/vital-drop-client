@@ -17,8 +17,8 @@ const Navbar = () => {
     };
 
     const navLinks = <>
-        <li><NavLink to="/search" className={({isActive}) => isActive ? "text-primary font-semibold" : ""}>Search Donors</NavLink></li>     
-        <li><NavLink to="/requests" className={({isActive}) => isActive ? "text-primary font-semibold" : ""}>Donation Requests</NavLink></li>
+        <li><NavLink to="/searchPage" className={({isActive}) => isActive ? "text-primary font-semibold" : ""}>Search Donors</NavLink></li>     
+        <li><NavLink to="/donationRequests" className={({isActive}) => isActive ? "text-primary font-semibold" : ""}>Donation Requests</NavLink></li>
         {user && (
             <li><NavLink to="/funding" className={({isActive}) => isActive ? "text-primary font-semibold" : ""}>Funding</NavLink></li>
         )}
