@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import axios from 'axios';
+import useAxiosSecure from '../../Hooks/useAxiosSecure';
+
 
 const SearchPage = () => {
   const { register, handleSubmit } = useForm();
@@ -22,7 +23,7 @@ const SearchPage = () => {
   const onSubmit = async (data) => {
     setSearched(true);
     try {
-      const res = await axios.get('http://localhost:3000/donors', {
+      const res = await useAxiosSecure.get('http://localhost:3000/donors', {
         params: {
           blood_group: data.blood_group,
           district: data.district,

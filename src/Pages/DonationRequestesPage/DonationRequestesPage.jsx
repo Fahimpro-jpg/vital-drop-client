@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
-import axios from 'axios';
-import useAuth from '../../../Hooks/useAuth';
+import useAuth from '../../Hooks/useAuth';
+import useAxiosSecure from '../../Hooks/useAxiosSecure';
+
 // assuming you have AuthContext
 
 const DonationRequestsPage = () => {
@@ -13,7 +14,7 @@ const DonationRequestsPage = () => {
     // fetch all pending donation requests
     const fetchRequests = async () => {
       try {
-        const res = await axios.get('http://localhost:3000/donation-requests?status=pending');
+        const res = await useAxiosSecure.get('http://localhost:3000/donation-requests?status=pending');
         setRequests(res.data);
       } catch (err) {
         console.error(err);

@@ -4,8 +4,9 @@ import HomePage from "../Pages/Home/HomePage/HomePage";
 import AuthLayout from "../Layouts/AuthLayout";
 import Login from "../Pages/Auth/Login/Login";
 import Register from "../Pages/Auth/Register/Register";
-import SearchPage from "../Pages/Home/SearchPage/SearchPage";
-import DonationRequestsPage from "../Pages/Home/DonationRequestsPage/DonationRequestsPage";
+import SearchPage from "../Pages/SearchPages/Searchpage";
+import DonationRequestsPage from "../Pages/DonationRequestesPage/DonationRequestesPage";
+
 
 export const router = createBrowserRouter([
   {
