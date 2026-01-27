@@ -64,7 +64,7 @@ const DashBoardLayout = () => {
             {/* Donor */}
             {role === 'donor' && (
               <li>
-                <NavLink to="/dashboard/my-requests">
+                <NavLink to="/dashboard/my-donation-request">
                   <FaHandHoldingHeart /> My Donation Requests
                 </NavLink>
               </li>
