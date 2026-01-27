@@ -7,39 +7,81 @@ import Register from "../Pages/Auth/Register/Register";
 import SearchPage from "../Pages/SearchPages/Searchpage";
 import DonationRequestsPage from "../Pages/DonationRequestesPage/DonationRequestesPage";
 
+// DashBoard imports
+import DashBoardLayout from "../Layouts/DashBoardLayout";
+import DashBoardHome from "../Pages/DashBoard/DashBoardHome/DashBoardHome";
+import AdminDashBoardHome from "../Pages/DashBoard/DashBoardHome/AdminDashBoardHome";
+import DonorDashBoardHome from "../Pages/DashBoard/DashBoardHome/DonorDashBoardHome";
+import VolunteerDashBoardHome from "../Pages/DashBoard/DashBoardHome/VolunteerDashBoardHome";
+import Profile from "../Pages/DashBoard/Profile/Profile";
+import UserManagement from "../Pages/Usermanagement/Usermanagement";
 
 export const router = createBrowserRouter([
+  // ===== Public Website =====
   {
     path: "/",
-    element: <RootLayout></RootLayout>,
-    children:[
-        {
-            index: true,
-            element:<HomePage></HomePage>
-        },
-        {
-          path: 'searchPage',
-          element: <SearchPage></SearchPage>
-        },
-        {
-          path:'donationRequests',
-          element:<DonationRequestsPage></DonationRequestsPage>
-        }
-       
+    element: <RootLayout />,
+    children: [
+      {
+        index: true,
+        element: <HomePage />
+      },
+      {
+        path: "searchPage",
+        element: <SearchPage />
+      },
+      {
+        path: "donationRequests",
+        element: <DonationRequestsPage />
+      }
     ]
   },
-   {
-          path:'/',
-          element:<AuthLayout></AuthLayout>,
-          children:[
-            {
-              path:'login',
-              element:<Login></Login>
-            },
-            {
-              path:'register',
-              element:<Register></Register>
-            }
-          ]
-        }
+
+  // ===== Auth =====
+  {
+    path: "/",
+    element: <AuthLayout />,
+    children: [
+      {
+        path: "login",
+        element: <Login />
+      },
+      {
+        path: "register",
+        element: <Register />
+      }
+    ]
+  },
+
+  // ===== DashBoard =====
+  {
+    path: "/dashboard",
+    element: <DashBoardLayout />,
+    children: [
+      {
+        index: true,
+        element: <DashBoardHome />   // role switcher page
+      },
+      {
+        path: "admin",
+        element: <AdminDashBoardHome />
+      },
+      {
+        path: "donor",
+        element: <DonorDashBoardHome />
+      },
+      {
+        path: "volunteer",
+        element: <VolunteerDashBoardHome />
+      },
+      {
+        path: "profile",
+        element: <Profile />
+      },
+      {
+        path: "users-management",
+        element: <UserManagement></UserManagement>
+      }
+    ]
+  }
 ]);
