@@ -67,13 +67,16 @@ const DashBoardLayout = () => {
                 <NavLink to="/dashboard/my-donation-request">
                   <FaHandHoldingHeart /> My Donation Requests
                 </NavLink>
+                <NavLink to="/dashboard/create-donation-request">
+                  <FaPlusCircle /> Create Request
+                </NavLink>
               </li>
             )}
 
             {/* Volunteer */}
             {role === 'volunteer' && (
               <li>
-                <NavLink to="/dashboard/create-request">
+                <NavLink to="/dashboard/create-donation-request">
                   <FaPlusCircle /> Create Request
                 </NavLink>
               </li>

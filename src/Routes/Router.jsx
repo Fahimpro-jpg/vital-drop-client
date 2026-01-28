@@ -16,6 +16,7 @@ import VolunteerDashBoardHome from "../Pages/DashBoard/DashBoardHome/VolunteerDa
 import Profile from "../Pages/DashBoard/Profile/Profile";
 import UserManagement from "../Pages/Usermanagement/Usermanagement";
 import MyDonationRequests from "../Pages/DashBoard/MyDonationRequests/MyDonationRequests";
+import CreateDonationRequest from "../Pages/DashBoard/CreateDonationRequest/CreateDonationRequest";
 
 export const router = createBrowserRouter([
   // ===== Public Website =====
@@ -82,6 +83,10 @@ export const router = createBrowserRouter([
       {
         path: "my-donation-request",
         element: <MyDonationRequests></MyDonationRequests>
+      },
+      {
+        path:"create-donation-request",
+        element:<CreateDonationRequest></CreateDonationRequest>
       },
       {
         path: "users-management",

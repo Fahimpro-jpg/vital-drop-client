@@ -106,7 +106,7 @@ const Navbar = () => {
                                 <span>{user?.displayName || user?.email}</span>
                             </li>
                             <li><NavLink to="/dashboard">DashBoard</NavLink></li> {/* Dashboard link */}
-                            <li><NavLink to="/profile">Profile</NavLink></li>
+                            <li><NavLink to="/dashboard/profile">Profile</NavLink></li>
                             <li><button onClick={handleLogout} className="text-error">Logout</button></li>
                         </ul>
                     </div>
