@@ -17,7 +17,6 @@ const CreateDonationRequest = () => {
 
   const selectedDistrict = watch("recipientDistrict");
 
-  /* 🚀 AUTH — FAST GUARD */
   if (loading) {
     return (
       <div className="min-h-[40vh] flex justify-center items-center">
@@ -34,24 +33,24 @@ const CreateDonationRequest = () => {
     );
   }
 
-  /* ⚡ Load districts ONCE */
+  // Load districts
   useEffect(() => {
     fetch('/districts.json')
       .then(res => res.json())
       .then(data => setDistricts(data));
   }, []);
 
-  /* ⚡ Upazila sync */
+  // Sync upazilas
   useEffect(() => {
     const found = districts.find(d => d.name === selectedDistrict);
     setUpazilas(found?.upazilas || []);
   }, [selectedDistrict, districts]);
 
-  /* 🚀 FAST DB USER CHECK (CACHED) */
+  // Check user status
   const { data: dbUser } = useQuery({
     queryKey: ['user-status', user.email],
     enabled: !!user?.email,
-    staleTime: 1000 * 60 * 5, // 🔥 5 minutes cache
+    staleTime: 1000 * 60 * 5,
     cacheTime: 1000 * 60 * 10,
     queryFn: async () => {
       const res = await axiosSecure.get(`/users/${user.email}`);
@@ -69,13 +68,22 @@ const CreateDonationRequest = () => {
     );
   }
 
-  /* ✅ Submit */
   const onSubmit = async (data) => {
     const donationRequest = {
       requesterName: user.displayName,
       requesterEmail: user.email,
-      ...data,
-      donationStatus: 'pending',
+      recipientName: data.recipientName,
+      recipientDistrict: data.recipientDistrict,
+      recipientUpazila: data.recipientUpazila,
+      hospitalName: data.hospitalName,
+      fullAddress: data.fullAddress,
+      bloodGroup: data.bloodGroup,
+      donationDate: data.donationDate,
+      donationTime: data.donationTime,
+      requestMessage: data.requestMessage,
+      status: 'pending', // ✅ corrected field
+      donorName: null,
+      donorEmail: null,
       createdAt: new Date()
     };
 
@@ -100,64 +108,45 @@ const CreateDonationRequest = () => {
           <form onSubmit={handleSubmit(onSubmit)} className="grid md:grid-cols-2 gap-4">
 
             {/* Requester */}
-            <input readOnly value={user.displayName}
-              className="input input-bordered w-full" />
+            <input readOnly value={user.displayName} className="input input-bordered w-full" />
+            <input readOnly value={user.email} className="input input-bordered w-full" />
 
-            <input readOnly value={user.email}
-              className="input input-bordered w-full" />
-
-            <input {...register("recipientName", { required: true })}
-              placeholder="Recipient Name"
-              className="input input-bordered w-full" />
-
-            <select {...register("bloodGroup", { required: true })}
-              className="select select-bordered w-full">
+            {/* Recipient */}
+            <input {...register("recipientName", { required: true })} placeholder="Recipient Name" className="input input-bordered w-full" />
+            <select {...register("bloodGroup", { required: true })} className="select select-bordered w-full">
               <option value="">Select Blood Group</option>
               {bloodGroups.map(bg => (
-                <option key={bg}>{bg}</option>
+                <option key={bg} value={bg}>{bg}</option>
               ))}
             </select>
 
-            <select {...register("recipientDistrict", { required: true })}
-              className="select select-bordered w-full">
+            {/* Location */}
+            <select {...register("recipientDistrict", { required: true })} className="select select-bordered w-full">
               <option value="">Select District</option>
               {districts.map(d => (
-                <option key={d.id}>{d.name}</option>
+                <option key={d.id} value={d.name}>{d.name}</option>
               ))}
             </select>
 
-            <select {...register("recipientUpazila", { required: true })}
-              disabled={!upazilas.length}
-              className="select select-bordered w-full">
+            <select {...register("recipientUpazila", { required: true })} disabled={!upazilas.length} className="select select-bordered w-full">
               <option value="">Select Upazila</option>
               {upazilas.map(u => (
-                <option key={u.id}>{u.name}</option>
+                <option key={u.id} value={u.name}>{u.name}</option>
               ))}
             </select>
 
-            <input {...register("hospitalName", { required: true })}
-              placeholder="Hospital Name"
-              className="input input-bordered w-full" />
+            {/* Hospital */}
+            <input {...register("hospitalName", { required: true })} placeholder="Hospital Name" className="input input-bordered w-full" />
+            <input type="date" {...register("donationDate", { required: true })} className="input input-bordered w-full" />
+            <input type="time" {...register("donationTime", { required: true })} className="input input-bordered w-full" />
 
-            <input type="date" {...register("donationDate", { required: true })}
-              className="input input-bordered w-full" />
+            {/* Address & Message */}
+            <input {...register("fullAddress", { required: true })} placeholder="Full Address" className="input input-bordered w-full md:col-span-2" />
+            <textarea {...register("requestMessage", { required: true })} placeholder="Why blood is needed..." className="textarea textarea-bordered w-full md:col-span-2" />
 
-            <input type="time" {...register("donationTime", { required: true })}
-              className="input input-bordered w-full" />
-
-            <input {...register("fullAddress", { required: true })}
-              placeholder="Full Address"
-              className="input input-bordered w-full md:col-span-2" />
-
-            <textarea {...register("requestMessage", { required: true })}
-              placeholder="Why blood is needed..."
-              className="textarea textarea-bordered w-full md:col-span-2" />
-
-            <button className="btn btn-primary md:col-span-2">
-              Request Blood 🩸
-            </button>
-
+            <button className="btn btn-primary md:col-span-2">Request Blood 🩸</button>
           </form>
+
         </div>
       </div>
     </div>
